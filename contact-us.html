@@ -69,7 +69,7 @@
 
     <section class="section" id="contact-section">
       <h2>Send Us a Message</h2>
-      <form class="contact-form" id="contactForm">
+      <form class="contact-form" id="contactForm" action="contact-us-submit.php" method="POST">
         <input type="text" name="name" placeholder="Your Name" required />
         <input type="email" name="email" placeholder="Your Email" required />
         <input type="text" name="subject" placeholder="Subject" required />
@@ -117,15 +117,29 @@
       topBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
     };
 
-    // Form submission handler
-    const form = document.getElementById("contactForm");
-    const thankYouMessage = document.getElementById("thankYouMessage");
+  // Form submission handler
+  const form = document.getElementById("contactForm");
+  const thankYouMessage = document.getElementById("thankYouMessage");
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault(); 
-      form.style.display = "none";
-      thankYouMessage.style.display = "block";
-    });
+form.addEventListener("submit", function (e) {
+  e.preventDefault(); // Prevent default form behavior
+
+  const formData = new FormData(form);
+
+  fetch("contact-us-submit.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.text())
+  .then(result => {
+    form.style.display = "none";
+    thankYouMessage.style.display = "block";
+    console.log(result); // Optional: log server response
+  })
+  .catch(error => {
+    console.error("Error submitting form:", error);
+  });
+});
   </script>
 </body>
 </html>
